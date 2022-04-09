@@ -1,8 +1,11 @@
-from game import Game
+from game import Game, EXIT_CODES
 
 N = 4
 WINDOW_SIZE = 600
-STEPS = 17
+STEPS = 1
 
-game = Game(WINDOW_SIZE, N, STEPS)
-game.start()
+while True:
+    game = Game(WINDOW_SIZE, N, STEPS)
+    exit_code = game.start()
+    if exit_code == EXIT_CODES.QUIT:
+        break

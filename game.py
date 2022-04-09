@@ -48,6 +48,11 @@ def get_cell_values_images(cell_size):
     }
 
 
+class EXIT_CODES:
+    QUIT = 0
+    NEW = 1
+
+
 class Game:
     def __init__(self, window_size, rows, steps):
         self.window_size = window_size
@@ -70,12 +75,15 @@ class Game:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return
-                elif event.type == pygame.MOUSEBUTTONDOWN and not self.is_end_game():
+                    return EXIT_CODES.QUIT
+                elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
+                        if self.is_end_game():
+                            return EXIT_CODES.NEW
                         self.change_cell_cross_by_mouse()
                         if self.is_end_game():
                             self.draw_win_label()
+
             pygame.display.update()
 
     def increase_step(self):

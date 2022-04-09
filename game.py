@@ -7,6 +7,7 @@ import pygame
 import random
 
 pygame.font.init()
+WHITE = (255, 255, 255)
 GRAY = (218, 218, 218)
 BLACK = (0, 0, 0)
 
@@ -16,6 +17,13 @@ class WIN_LABEL:
     font = pygame.font.SysFont('Comic Sans', 48)
     width = 275
     height = 40
+
+
+class STEP_COUNTER:
+    text = 'Steps: '
+    font = pygame.font.SysFont('Comic Sans', 24)
+    width = 100
+    height = 20
 
 
 class CELL_VALUES:
@@ -46,11 +54,11 @@ class Game:
         self.rows = rows
         self.steps = steps
         self.cell_size = self.window_size // self.rows
-        self.window = pygame.display.set_mode((self.window_size, self.window_size))
+        self.window = pygame.display.set_mode((self.window_size, self.window_size + STEP_COUNTER.height))
         self.images = get_cell_values_images(self.cell_size)
 
         self.field = [[CELL_VALUES.HORIZONTAL] * self.rows for _ in range(self.rows)]
-        # self.is_end_game = False
+        self.cur_step = 0
 
     def start(self):
         pygame.init()
@@ -70,10 +78,15 @@ class Game:
                             self.draw_win_label()
             pygame.display.update()
 
+    def increase_step(self):
+        self.cur_step += 1
+        self.draw_step_counter()
+
     def change_cell_cross_by_mouse(self):
         mouse_pos = pygame.mouse.get_pos()
         cur_cell_x, cur_cell_y = self.coordinates_to_cell(*mouse_pos)
         self.change_cell_cross(cur_cell_x, cur_cell_y)
+        self.increase_step()
 
     def change_cell_cross(self, cur_cell_x, cur_cell_y):
         for cell_x in range(0, len(self.field)):
@@ -93,12 +106,12 @@ class Game:
 
     def coordinates_to_cell(self, x, y):
         cell_x = x // self.cell_size
-        cell_y = y // self.cell_size
+        cell_y = (y - STEP_COUNTER.height) // self.cell_size
         return cell_x, cell_y
 
     def cell_image_coordinates(self, cell_x, cell_y):
         x = self.cell_size * cell_x
-        y = self.cell_size * cell_y
+        y = self.cell_size * cell_y + STEP_COUNTER.height
         return x, y
 
     def fill_cell(self, cell_x, cell_y):
@@ -108,7 +121,18 @@ class Game:
         self.window.blit(self.images[CELL_VALUES.EMPTY], (x, y))
         self.window.blit(self.images[value], (x, y))
 
+    def draw_step_counter(self):
+        pygame.draw.rect(self.window, WHITE, (
+            0, 0, self.window_size, STEP_COUNTER.height
+        ))
+        x = self.window_size - STEP_COUNTER.width
+        y = 5
+        text = STEP_COUNTER.text + str(self.cur_step)
+        text_img = STEP_COUNTER.font.render(text, True, BLACK)
+        self.window.blit(text_img, (x, y))
+
     def draw_field(self):
+        self.draw_step_counter()
         for x in range(len(self.field)):
             for y in range(len(self.field[x])):
                 self.fill_cell(x, y)
@@ -125,10 +149,6 @@ class Game:
                 if cell == CELL_VALUES.VERTICAL:
                     return False
         return True
-
-    # def check_end_game(self):
-    #     if self._is_end_game():
-    #         self.is_end_game = True
 
     def draw_win_label(self):
         x = int((self.window_size - WIN_LABEL.width) / 2)

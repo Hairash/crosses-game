@@ -1,11 +1,15 @@
 from game import Game, EXIT_CODES
 
-N = 4
 WINDOW_SIZE = 600
-STEPS = 7
 
+rows = 4
+difficulty_level = 1
 while True:
-    game = Game(WINDOW_SIZE, N, STEPS)
+    if difficulty_level > rows * rows:
+        rows += 1
+        difficulty_level = 1
+    game = Game(WINDOW_SIZE, rows, difficulty_level)
     exit_code = game.start()
     if exit_code == EXIT_CODES.QUIT:
         break
+    difficulty_level += 1

@@ -69,7 +69,7 @@ class Game:
 
     def start(self):
         pygame.init()
-        pygame.display.set_caption('Crosses')
+        pygame.display.set_caption(f'Crosses. Level: {self.difficulty_level}')
 
         self.draw_field()
         self.shuffle(self.difficulty_level)

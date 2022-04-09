@@ -5,7 +5,7 @@ Puzzle like in "Pilot Brothers" quest game.
 _(images from the "Pilot brothers" game)_
 
 But this game is endless with the constantly increasing level of difficulty.  
-All the graphics in the game is original, created by Ira Grebenshchikova ([behance](https://behance.net/stillira8e38), [instagram](https://instagram.com/still.ira/)).
+All the graphics in the game is original, created by **Ira Grebenshchikova** ([behance](https://behance.net/stillira8e38), [instagram](https://instagram.com/still.ira/)).
 
 
 # How to run

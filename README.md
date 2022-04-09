@@ -1,2 +1,2 @@
 # crosses-game
-Game like in "Pilot Brothers" game
+Puzzle like in "Pilot Brothers" quest game

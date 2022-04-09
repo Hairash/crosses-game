@@ -2,7 +2,7 @@
 Puzzle like in "Pilot Brothers" quest game.  
 <img src='https://user-images.githubusercontent.com/12399047/162591428-feb8ab20-95ef-45fa-864d-1623719ae3cd.jpg' height=200>
 <img src='https://user-images.githubusercontent.com/12399047/162591433-0baaf3aa-4ee7-4421-9ce9-af69ad5e85ea.jpg' height=200>  
-_(images from the game)_
+_(images from the "Pilot brothers" game)_
 
 But this game is endless with the constantly increasing level of difficulty.
 

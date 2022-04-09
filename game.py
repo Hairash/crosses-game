@@ -54,10 +54,12 @@ class EXIT_CODES:
 
 
 class Game:
-    def __init__(self, window_size, rows, steps):
+    def __init__(self, window_size, rows, difficulty_level):
+        if difficulty_level > rows * rows:
+            raise Exception('Difficulty level cannot be so high')
         self.window_size = window_size
         self.rows = rows
-        self.steps = steps
+        self.difficulty_level = difficulty_level
         self.cell_size = self.window_size // self.rows
         self.window = pygame.display.set_mode((self.window_size, self.window_size + STEP_COUNTER.height))
         self.images = get_cell_values_images(self.cell_size)
@@ -70,7 +72,7 @@ class Game:
         pygame.display.set_caption('Crosses')
 
         self.draw_field()
-        self.shuffle(self.steps)
+        self.shuffle(self.difficulty_level)
 
         while True:
             for event in pygame.event.get():
@@ -146,10 +148,15 @@ class Game:
                 self.fill_cell(x, y)
 
     def shuffle(self, steps):
+        cell_set = set()
         for _ in range(steps):
             cell_x = random.randint(0, len(self.field) - 1)
             cell_y = random.randint(0, len(self.field) - 1)
+            while (cell_x, cell_y) in cell_set:
+                cell_x = random.randint(0, len(self.field) - 1)
+                cell_y = random.randint(0, len(self.field) - 1)
             self.change_cell_cross(cell_x, cell_y)
+            cell_set.add((cell_x, cell_y))
 
     def is_end_game(self):
         for row in self.field:

@@ -2,7 +2,7 @@ from game import Game, EXIT_CODES
 
 N = 4
 WINDOW_SIZE = 600
-STEPS = 1
+STEPS = 7
 
 while True:
     game = Game(WINDOW_SIZE, N, STEPS)

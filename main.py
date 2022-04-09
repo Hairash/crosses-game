@@ -1,12 +1,11 @@
+from const import WINDOW_SIZE, INIT_ROWS, SAVE_FILE_PATH
 from game import Game, EXIT_CODES
-
-WINDOW_SIZE = 600
 
 
 class GameCycle:
     def __init__(self):
-        self.save_file_name = '.progress.sav'
-        self.rows = 4
+        self.save_file_name = SAVE_FILE_PATH
+        self.rows = INIT_ROWS
         self.difficulty_level = 1
         self.load_game()
 

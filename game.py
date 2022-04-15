@@ -5,7 +5,8 @@ cell_x, cell_y - cell coordinates (0..N-1)
 
 import pygame
 import random
-from const import INIT_ROWS, WHITE, BACKGROUND, INIT_CELL_SIZE
+from const import WHITE, BACKGROUND, INIT_CELL_SIZE
+from sound import TURN_SOUND, CONGRATULATIONS_SOUND
 
 pygame.init()
 pygame.font.init()
@@ -101,10 +102,13 @@ class Game:
                     if event.button == 1:
                         if self.is_end_game():
                             return EXIT_CODES.NEW
+                        pygame.mixer.Sound.play(TURN_SOUND)
                         self.change_cell_cross_by_mouse()
                         self.draw_field()
                         if self.is_end_game():
                             self.draw_win_label()
+                            pygame.mixer.Sound.stop(TURN_SOUND)
+                            pygame.mixer.Sound.play(CONGRATULATIONS_SOUND)
 
             pygame.display.update()
 
@@ -175,9 +179,7 @@ class Game:
                 self.draw_sunny(cell_x, cell_y)
 
     def draw_field(self):
-        """Draw everything in the correct order
-        :return:
-        """
+        """Draw everything in the correct order"""
         pygame.draw.rect(self.window, BACKGROUND, (
             0, 0, self.window_size, self.window_size + STEP_COUNTER.height
         ))

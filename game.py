@@ -5,7 +5,7 @@ cell_x, cell_y - cell coordinates (0..N-1)
 
 import pygame
 import random
-from const import INIT_ROWS, WHITE, BACKGROUND, INIT_CELL_SIZE
+from const import INIT_ROWS, WHITE, BACKGROUND, INIT_CELL_SIZE, SUNNY_OFFSET
 
 pygame.init()
 pygame.font.init()
@@ -78,11 +78,11 @@ class Game:
     def __init__(self, window_size, rows, difficulty_level):
         if difficulty_level > rows * rows:
             raise Exception('Difficulty level cannot be so high')
-        self.window_size = window_size
+        self.window_size = window_size - 2 * SUNNY_OFFSET
         self.rows = rows
         self.difficulty_level = difficulty_level
         self.cell_size = self.window_size // self.rows
-        self.window = pygame.display.set_mode((self.window_size, self.window_size + STEP_COUNTER.height))
+        self.window = pygame.display.set_mode((window_size, window_size + STEP_COUNTER.height))
         self.images = get_cell_values_images(self.cell_size)
 
         self.field = [[CELL_VALUES.HORIZONTAL] * self.rows for _ in range(self.rows)]
@@ -135,13 +135,13 @@ class Game:
         # self.fill_cell(cell_x, cell_y)
 
     def coordinates_to_cell(self, x, y):
-        cell_x = x // self.cell_size
-        cell_y = (y - STEP_COUNTER.height) // self.cell_size
+        cell_x = (x - SUNNY_OFFSET) // self.cell_size
+        cell_y = (y - STEP_COUNTER.height - SUNNY_OFFSET) // self.cell_size
         return cell_x, cell_y
 
     def cell_image_coordinates(self, cell_x, cell_y):
-        x = self.cell_size * cell_x
-        y = self.cell_size * cell_y + STEP_COUNTER.height
+        x = self.cell_size * cell_x + SUNNY_OFFSET
+        y = self.cell_size * cell_y + STEP_COUNTER.height + SUNNY_OFFSET
         return x, y
 
     def fill_cell(self, cell_x, cell_y):
@@ -179,7 +179,7 @@ class Game:
         :return:
         """
         pygame.draw.rect(self.window, BACKGROUND, (
-            0, 0, self.window_size, self.window_size + STEP_COUNTER.height
+            0, 0, self.window_size + 2 * SUNNY_OFFSET, self.window_size + STEP_COUNTER.height + 2 * SUNNY_OFFSET
         ))
         self.draw_grid()
         self.draw_step_counter()

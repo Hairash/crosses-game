@@ -22,7 +22,7 @@ class GameCycle:
                 self.rows += 1
                 self.difficulty_level = 1
             self.save_game()
-            game = Game(WINDOW_SIZE, self.rows, self.difficulty_level)
+            game = Game(self.rows, self.difficulty_level)
             exit_code = game.start()
             if exit_code == EXIT_CODES.QUIT:
                 return

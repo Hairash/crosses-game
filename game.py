@@ -119,14 +119,14 @@ class Game:
         return digits[::-1]
 
     def _draw_digit(self, digit: int, digit_offset: int, step_counter_right_offset: int):
-        x = self.window_size - step_counter_right_offset + digit_offset
+        x = self.window_size + INDENT_SIZE - step_counter_right_offset + digit_offset
         y = INDENT_SIZE
         self.window.blit(DIGIT_IMAGE.images[digit], (x, y))
 
     def draw_step_counter(self):
         digit_list = self._get_digit_list(self.cur_step)
         step_counter_right_offset = DIGIT_IMAGE.width * len(digit_list)
-        x = self.window_size - INDENT_SIZE - STEP_COUNTER.width - step_counter_right_offset
+        x = self.window_size - STEP_COUNTER.width - step_counter_right_offset
         y = INDENT_SIZE
         self.window.blit(STEP_COUNTER.image, (x, y))
 
@@ -171,6 +171,10 @@ class Game:
         # Custom label output on the first level only
         if self.rows == 1:
             y = int(self.window_size * 0.4 + STEP_COUNTER.height)
+        elif self.rows == 3:
+            y = int(-self.window_size * 0.16 + STEP_COUNTER.height)
+        elif self.rows == 5:
+            y = int(-self.window_size * 0.08 + STEP_COUNTER.height)
         else:
             y = int((self.window_size - WIN_LABEL.height) / 2) + STEP_COUNTER.height + INDENT_SIZE
         # print(x, y)
@@ -179,7 +183,6 @@ class Game:
 
         if self.rows >= 11:
             num_lines_to_fill = self.rows // 5
-            print(WIN_LABEL.height, self.cell_size, num_lines_to_fill)
             num_lines_to_fill = (num_lines_to_fill + (self.rows + 1) % 2) // 2 * 2 + self.rows % 2
             pygame.draw.rect(self.window, BACKGROUND, (
                 0,
@@ -187,7 +190,7 @@ class Game:
                 self.window_size + 2 * INDENT_SIZE,
                 self.cell_size * num_lines_to_fill,
             ))
-        elif self.rows >= 3 and self.rows % 2:
+        elif self.rows >= 7 and self.rows % 2:
             pygame.draw.rect(self.window, BACKGROUND, (
                 0,
                 (self.rows - 1) // 2 * self.cell_size + INDENT_SIZE + STEP_COUNTER.height,

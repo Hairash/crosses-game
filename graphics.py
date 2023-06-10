@@ -1,11 +1,15 @@
+import os
+
 import pygame
 
-from const import WINDOW_SIZE, INDENT_SIZE, CELL_VALUES, STEP_COUNTER_HEIGHT
+from const import WINDOW_SIZE, INDENT_SIZE, CELL_VALUES, STEP_COUNTER_HEIGHT, BASE_PATH
 
 pygame.init()
+icon = pygame.image.load(os.path.join(BASE_PATH, 'images/croc_left.png'))
+pygame.display.set_icon(icon)
 pygame.font.init()
 WINDOW = pygame.display.set_mode(
-    (WINDOW_SIZE + 2 * INDENT_SIZE, WINDOW_SIZE + 2 * INDENT_SIZE + STEP_COUNTER_HEIGHT)
+    (WINDOW_SIZE + 2 * INDENT_SIZE, WINDOW_SIZE + 2 * INDENT_SIZE + STEP_COUNTER_HEIGHT),
 )
 
 # Colors
@@ -16,7 +20,7 @@ BACKGROUND = (0, 33, 36)
 
 # Images
 def get_pygame_image(path, width, height):
-    return pygame.transform.scale(pygame.image.load(path), (width, height))
+    return pygame.transform.scale(pygame.image.load(os.path.join(BASE_PATH, path)), (width, height))
 
 
 class WIN_LABEL:

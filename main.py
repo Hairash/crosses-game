@@ -1,10 +1,18 @@
-from const import WINDOW_SIZE, INIT_ROWS, SAVE_FILE_PATH
+import os
+
+import pygame
+pygame.init()
+
+from const import WINDOW_SIZE, INIT_ROWS, SAVE_FILE_PATH, BASE_PATH
 from game import Game, EXIT_CODES
+
+
+print('BASE PATH:', BASE_PATH)
 
 
 class GameCycle:
     def __init__(self):
-        self.save_file_name = SAVE_FILE_PATH
+        self.save_file_name = os.path.join(BASE_PATH, SAVE_FILE_PATH)
         self.rows = INIT_ROWS
         self.difficulty_level = 1
         self.load_game()

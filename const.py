@@ -2,9 +2,10 @@ import os
 import sys
 
 # Path
-# TODO: Add flag to choose BASE_PATH (dev or prod)
 BASE_PATH = os.path.dirname(sys.executable)
-# BASE_PATH = '.'
+# Dev mode
+if len(sys.argv) > 1 and sys.argv[1] == 'dev':
+    BASE_PATH = '.'
 
 # Game parameters
 INIT_ROWS = 1

@@ -42,7 +42,7 @@ class Game:
         self.cur_step = 0
 
     def start(self):
-        pygame.display.set_caption(f'Croco Cross. Level: {self.difficulty_level}')
+        pygame.display.set_caption(f'Croco game. Level: {self.difficulty_level}')
         self.shuffle(self.difficulty_level)
         self.draw_field()
 

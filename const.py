@@ -1,3 +1,12 @@
+import os
+import sys
+
+# Path
+BASE_PATH = os.path.dirname(sys.executable)
+# Dev mode
+if len(sys.argv) > 1 and sys.argv[1] == 'dev':
+    BASE_PATH = '.'
+
 # Game parameters
 INIT_ROWS = 1
 WINDOW_SIZE = 600

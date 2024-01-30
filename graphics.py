@@ -56,6 +56,17 @@ class DIGIT_IMAGE:
     for key, value in DIGIT_IMAGE_DICT.items():
         images[key] = get_pygame_image(value, width, height)
 
+class MINUS_BUTTON:
+    width = STEP_COUNTER_HEIGHT
+    height = STEP_COUNTER_HEIGHT
+    image = get_pygame_image('images/labels/minus.png', width, height)
+
+
+class PLUS_BUTTON:
+    width = STEP_COUNTER_HEIGHT
+    height = STEP_COUNTER_HEIGHT
+    image = get_pygame_image('images/labels/plus.png', width, height)
+
 
 CELL_VALUE_IMAGE_DICT = {
     CELL_VALUES.HORIZONTAL: 'images/croc_left.png',

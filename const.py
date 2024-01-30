@@ -19,3 +19,9 @@ SAVE_FILE_PATH = '.progress.sav'
 class CELL_VALUES:
     HORIZONTAL = 0
     VERTICAL = 1
+
+# Buttons
+SOUND_MINUS = 'sound_minus'
+SOUND_PLUS = 'sound_plus'
+MUSIC_MINUS = 'music_minus'
+MUSIC_PLUS = 'music_plus'

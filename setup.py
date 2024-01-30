@@ -1,21 +1,21 @@
-from setuptools import setup
-
+from setuptools import setup, find_packages
 
 setup(
-    app=['main.py'],
-    data_files=[],
-    options={
-        'py2app': {
-            'iconfile': 'croco.icns',
-            'argv_emulation': True,
-            'packages': ['pygame'],
-            'plist': {
-                'CFBundleName': 'Croco game',
-                'CFBundleDisplayName': 'Croco game',
-                'CFBundleShortVersionString': '1.0.0',
-                'CFBundleVersion': '1.0.0',
-            },
-        },
+    name='croco-game',
+    version='1.0.0',
+    packages=find_packages(),
+    package_data={
+        'app': [
+            'images/*.png',
+            'images/labels/*.png',
+            'images/digits/*.png',
+            'sound/*.mp3',
+        ],
     },
-    setup_requires=['py2app'],
+    install_requires=['pygame'],
+    entry_points={
+        'console_scripts': [
+            'croco-game=app.main:main'
+        ]
+    },
 )

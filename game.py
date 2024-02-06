@@ -6,10 +6,23 @@ cell_x, cell_y - cell coordinates (0..N-1)
 import pygame
 import random
 import typing
+from button import Button
 
-from const import CELL_VALUES, WINDOW_SIZE, INDENT_SIZE
+from const import (
+    CELL_VALUES,
+    MUSIC_MINUS,
+    MUSIC_PLUS,
+    SOUND_MINUS,
+    SOUND_PLUS,
+    WINDOW_SIZE,
+    INDENT_SIZE,
+)
 
 from graphics import (
+    MINUS_BUTTON,
+    MUSIC_ICON,
+    PLUS_BUTTON,
+    SOUND_ICON,
     WINDOW,
     BACKGROUND,
     BACKGROUND_IMAGE,
@@ -17,9 +30,15 @@ from graphics import (
     STEP_COUNTER,
     DIGIT_IMAGE,
     get_cell_values_images,
-    fade_out, grow_image,
+    # fade_out,
+    # grow_image,
 )
-from sound import TURN_SOUND, CONGRATULATIONS_SOUND
+from sound import (
+    TURN_SOUND,
+    CONGRATULATIONS_SOUND,
+    change_sound_volume,
+    change_music_volume,
+)
 
 
 class EXIT_CODES:
@@ -37,6 +56,12 @@ class Game:
         self.cell_size = self.window_size // self.rows
         self.window = WINDOW
         self.images = get_cell_values_images(self.cell_size)
+        self.buttons = {
+            SOUND_MINUS: None,
+            SOUND_PLUS: None,
+            MUSIC_MINUS: None,
+            MUSIC_PLUS: None,
+        }
 
         self.field = [[CELL_VALUES.HORIZONTAL] * self.rows for _ in range(self.rows)]
         self.cur_step = 0
@@ -54,8 +79,9 @@ class Game:
                     if event.button == 1:
                         if self.is_end_game():
                             return EXIT_CODES.NEW
-                        pygame.mixer.Sound.play(TURN_SOUND)
-                        self.change_cell_cross_by_mouse()
+                        mouse_pos = pygame.mouse.get_pos()
+                        self.process_buttons(mouse_pos)
+                        self.change_cell_cross_by_mouse(mouse_pos)
                         self.draw_field()
                         if self.is_end_game():
                             self.draw_win_label()
@@ -70,12 +96,12 @@ class Game:
     def are_cell_coords_correct(self, cell_x, cell_y):
         return 0 <= cell_x < self.rows and 0 <= cell_y < self.rows
 
-    def change_cell_cross_by_mouse(self):
-        mouse_pos = pygame.mouse.get_pos()
+    def change_cell_cross_by_mouse(self, mouse_pos):
         cur_cell_x, cur_cell_y = self.coordinates_to_cell(*mouse_pos)
         if self.are_cell_coords_correct(cur_cell_x, cur_cell_y):
             self.change_cell_cross(cur_cell_x, cur_cell_y)
             self.increase_step()
+            pygame.mixer.Sound.play(TURN_SOUND)
 
     def change_cell_cross(self, cur_cell_x: int, cur_cell_y: int):
         for cell_x in range(0, self.rows):
@@ -107,6 +133,18 @@ class Game:
         value = self.field[cell_x][cell_y]
         self.window.blit(self.images[value], (x, y))
 
+    def process_buttons(self, mouse_pos):
+        if self.buttons[SOUND_MINUS].is_over(mouse_pos):
+            change_sound_volume(False)
+            pygame.mixer.Sound.play(TURN_SOUND)
+        if self.buttons[SOUND_PLUS].is_over(mouse_pos):
+            change_sound_volume(True)
+            pygame.mixer.Sound.play(TURN_SOUND)
+        if self.buttons[MUSIC_MINUS].is_over(mouse_pos):
+            change_music_volume(False)
+        if self.buttons[MUSIC_PLUS].is_over(mouse_pos):
+            change_music_volume(True)
+
     @staticmethod
     def _get_digit_list(num: int) -> typing.List[int]:
         if num == 0:
@@ -133,6 +171,71 @@ class Game:
         for i, digit in enumerate(digit_list):
             self._draw_digit(digit, i * DIGIT_IMAGE.width, step_counter_right_offset)
 
+    def draw_buttons(self):
+        sound_minus_btn = Button(
+            self.window,
+            INDENT_SIZE,
+            INDENT_SIZE,
+            MINUS_BUTTON.width,
+            MINUS_BUTTON.height,
+            MINUS_BUTTON.image,
+        )
+        sound_minus_btn.draw()
+        self.buttons[SOUND_MINUS] = sound_minus_btn
+
+        sound_btn = Button(
+            self.window,
+            sound_minus_btn.x + sound_minus_btn.width + INDENT_SIZE,
+            INDENT_SIZE,
+            SOUND_ICON.width,
+            SOUND_ICON.height,
+            SOUND_ICON.image,
+        )
+        sound_btn.draw()
+
+        sound_plus_btn = self.buttons[SOUND_PLUS] = Button(
+            self.window,
+            sound_btn.x + sound_btn.width + INDENT_SIZE,
+            INDENT_SIZE,
+            PLUS_BUTTON.width,
+            PLUS_BUTTON.height,
+            PLUS_BUTTON.image,
+        )
+        sound_plus_btn.draw()
+        self.buttons[SOUND_PLUS] = sound_plus_btn
+
+        music_minus_btn = Button(
+            self.window,
+            sound_plus_btn.x + sound_plus_btn.width * 2 + INDENT_SIZE * 2,
+            INDENT_SIZE,
+            MINUS_BUTTON.width,
+            MINUS_BUTTON.height,
+            MINUS_BUTTON.image,
+        )
+        music_minus_btn.draw()
+        self.buttons[MUSIC_MINUS] = music_minus_btn
+
+        music_btn = Button(
+            self.window,
+            music_minus_btn.x + music_minus_btn.width + INDENT_SIZE,
+            INDENT_SIZE,
+            MUSIC_ICON.width,
+            MUSIC_ICON.height,
+            MUSIC_ICON.image,
+        )
+        music_btn.draw()
+
+        music_plus_btn = self.buttons[MUSIC_PLUS] = Button(
+            self.window,
+            music_btn.x + music_btn.width + INDENT_SIZE,
+            INDENT_SIZE,
+            PLUS_BUTTON.width,
+            PLUS_BUTTON.height,
+            PLUS_BUTTON.image,
+        )
+        music_plus_btn.draw()
+        self.buttons[MUSIC_PLUS] = music_plus_btn
+
     def draw_background(self):
         self.window.blit(BACKGROUND_IMAGE, (0, 0))
 
@@ -143,6 +246,7 @@ class Game:
         ))
         self.draw_background()
         self.draw_step_counter()
+        self.draw_buttons()
         for x in range(self.rows):
             for y in range(len(self.field[x])):
                 self.fill_cell(x, y)
@@ -168,7 +272,7 @@ class Game:
 
     def draw_win_label(self):
         x = int((self.window_size + 2 * INDENT_SIZE - WIN_LABEL.width) / 2)
-        # Custom label output on the first level only
+        # Custom label output on the first odd levels
         if self.rows == 1:
             y = int(self.window_size * 0.4 + STEP_COUNTER.height)
         elif self.rows == 3:

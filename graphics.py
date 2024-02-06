@@ -32,13 +32,13 @@ class WIN_LABEL:
 
 
 class STEP_COUNTER:
-    width = 105
+    width = 84
     height = STEP_COUNTER_HEIGHT
     image = get_pygame_image('images/labels/steps.png', width, height)
 
 
 class DIGIT_IMAGE:
-    width = 23
+    width = 18
     height = STEP_COUNTER_HEIGHT
     DIGIT_IMAGE_DICT = {
         0: 'images/digits/0.png',
@@ -55,6 +55,30 @@ class DIGIT_IMAGE:
     images = {}
     for key, value in DIGIT_IMAGE_DICT.items():
         images[key] = get_pygame_image(value, width, height)
+
+
+class MINUS_BUTTON:
+    width = STEP_COUNTER_HEIGHT
+    height = STEP_COUNTER_HEIGHT
+    image = get_pygame_image('images/labels/minus.png', width, height)
+
+
+class PLUS_BUTTON:
+    width = STEP_COUNTER_HEIGHT
+    height = STEP_COUNTER_HEIGHT
+    image = get_pygame_image('images/labels/plus.png', width, height)
+
+
+class SOUND_ICON:
+    width = int(STEP_COUNTER_HEIGHT / 1.6)
+    height = STEP_COUNTER_HEIGHT
+    image = get_pygame_image('images/labels/sound.png', width, height)
+
+
+class MUSIC_ICON:
+    width = STEP_COUNTER_HEIGHT
+    height = STEP_COUNTER_HEIGHT
+    image = get_pygame_image('images/labels/music.png', width, height)
 
 
 CELL_VALUE_IMAGE_DICT = {

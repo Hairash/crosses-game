@@ -1,5 +1,6 @@
 # My files
 .progress.sav
+.story_progress.sav
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

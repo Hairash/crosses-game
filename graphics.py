@@ -2,7 +2,7 @@ import os
 
 import pygame
 
-from const import WINDOW_SIZE, INDENT_SIZE, CELL_VALUES, STEP_COUNTER_HEIGHT, BASE_PATH
+from const import GAME_MODE, GAME_MODES, WINDOW_SIZE, INDENT_SIZE, CELL_VALUES, STEP_COUNTER_HEIGHT, BASE_PATH
 
 pygame.init()
 icon = pygame.image.load(os.path.join(BASE_PATH, 'images/croc_left.png'))
@@ -86,6 +86,12 @@ CELL_VALUE_IMAGE_DICT = {
     CELL_VALUES.VERTICAL: 'images/croc_up.png',
 }
 
+if GAME_MODE == GAME_MODES.STORY:
+    CELL_VALUE_IMAGE_DICT = {
+        CELL_VALUES.HORIZONTAL: 'images/mouse_right.png',
+        CELL_VALUES.VERTICAL: 'images/mouse_up.png',
+    }
+
 
 def get_cell_values_images(cell_size):
     return {
@@ -95,7 +101,7 @@ def get_cell_values_images(cell_size):
 
 
 BACKGROUND_IMAGE = get_pygame_image(
-    'images/background.png',
+    'images/background2.jpg',
     WINDOW_SIZE + 2 * INDENT_SIZE + STEP_COUNTER.height,
     WINDOW_SIZE + 2 * INDENT_SIZE + STEP_COUNTER.height,
 )

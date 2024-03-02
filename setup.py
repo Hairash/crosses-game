@@ -12,8 +12,8 @@ setup(
             'plist': {
                 'CFBundleName': 'Croco game',
                 'CFBundleDisplayName': 'Croco game',
-                'CFBundleShortVersionString': '1.0.0',
-                'CFBundleVersion': '1.0.0',
+                'CFBundleShortVersionString': '1.0.1',
+                'CFBundleVersion': '1.0.1',
             },
         },
     },

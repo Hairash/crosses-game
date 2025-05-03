@@ -86,11 +86,11 @@ CELL_VALUE_IMAGE_DICT = {
     CELL_VALUES.VERTICAL: 'images/croc_up.png',
 }
 
-if GAME_MODE == GAME_MODES.STORY:
-    CELL_VALUE_IMAGE_DICT = {
-        CELL_VALUES.HORIZONTAL: 'images/mouse_right.png',
-        CELL_VALUES.VERTICAL: 'images/mouse_up.png',
-    }
+# if GAME_MODE == GAME_MODES.STORY:
+#     CELL_VALUE_IMAGE_DICT = {
+#         CELL_VALUES.HORIZONTAL: 'images/mouse_right.png',
+#         CELL_VALUES.VERTICAL: 'images/mouse_up.png',
+#     }
 
 
 def get_cell_values_images(cell_size):
@@ -101,7 +101,7 @@ def get_cell_values_images(cell_size):
 
 
 BACKGROUND_IMAGE = get_pygame_image(
-    'images/background2.jpg',
+    'images/background.png',
     WINDOW_SIZE + 2 * INDENT_SIZE + STEP_COUNTER.height,
     WINDOW_SIZE + 2 * INDENT_SIZE + STEP_COUNTER.height,
 )

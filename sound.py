@@ -47,6 +47,8 @@ CONGRATULATIONS_SOUNDS = {
 CONGRATULATIONS_SOUND = CONGRATULATIONS_SOUNDS['Wooo']
 CONGRATULATIONS_SOUND.set_volume(0.2)
 
+# TODO: Load another music for STORY mode
+# TODO: Load special win music in the end
 pygame.mixer.music.load(os.path.join(BASE_PATH, 'sound/Croco theme.mp3'))
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)

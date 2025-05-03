@@ -20,7 +20,9 @@ from const import (
 
 from graphics import (
     MINUS_BUTTON,
+    MUSIC_ICON,
     PLUS_BUTTON,
+    SOUND_ICON,
     WINDOW,
     BACKGROUND,
     BACKGROUND_IMAGE,
@@ -53,7 +55,9 @@ class GameStory:
         if self.rows:
             self.check_mask()
             self.cell_size = self.window_size // self.rows
-            self.images = get_cell_values_images(self.cell_size)
+        else:
+            self.cell_size = 80
+        self.images = get_cell_values_images(self.cell_size)
         self.window = WINDOW
         self.buttons = {
             SOUND_MINUS: None,
@@ -71,11 +75,15 @@ class GameStory:
 
     def start(self):
         pygame.display.set_caption(f'Croco game. Level: {self.difficulty_level}')
-        self.shuffle(self.difficulty_level)
-        self.draw_field()
 
+        print(self.rows)
         if not self.rows:
+            print('end game')
+            self.draw_field()
             self.end_game()
+        else:
+            self.shuffle(self.difficulty_level)
+            self.draw_field()
 
         while True:
             for event in pygame.event.get():
@@ -83,16 +91,25 @@ class GameStory:
                     return EXIT_CODES.QUIT
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        if self.is_end_game():
-                            return EXIT_CODES.NEW
                         mouse_pos = pygame.mouse.get_pos()
-                        self.process_buttons(mouse_pos)
-                        self.change_cell_cross_by_mouse(mouse_pos)
-                        self.draw_field()
-                        if self.is_end_game():
-                            self.draw_win_label()
-                            pygame.mixer.Sound.stop(TURN_SOUND)
-                            pygame.mixer.Sound.play(CONGRATULATIONS_SOUND)
+                        if not self.rows:
+                            self.draw_rat_in_place(mouse_pos)
+                            pygame.mixer.Sound.play(TURN_SOUND)
+                        elif self.is_end_game():
+                            return EXIT_CODES.NEW
+                        else:
+                            self.process_buttons(mouse_pos)
+                            self.change_cell_cross_by_mouse(mouse_pos)
+                            self.draw_field()
+                            if self.is_end_game():
+                                self.draw_win_label()
+                                pygame.mixer.Sound.stop(TURN_SOUND)
+                                pygame.mixer.Sound.play(CONGRATULATIONS_SOUND)
+                # Trace of rats doesn't look good
+                # elif event.type == pygame.MOUSEMOTION:
+                #     mouse_pos = pygame.mouse.get_pos()
+                #     self.draw_rat_in_place(mouse_pos)
+                #     pygame.time.wait(50)
 
             pygame.display.update()
 
@@ -142,8 +159,10 @@ class GameStory:
     def process_buttons(self, mouse_pos):
         if self.buttons[SOUND_MINUS].is_over(mouse_pos):
             change_sound_volume(False)
+            pygame.mixer.Sound.play(TURN_SOUND)
         if self.buttons[SOUND_PLUS].is_over(mouse_pos):
             change_sound_volume(True)
+            pygame.mixer.Sound.play(TURN_SOUND)
         if self.buttons[MUSIC_MINUS].is_over(mouse_pos):
             change_music_volume(False)
         if self.buttons[MUSIC_PLUS].is_over(mouse_pos):
@@ -176,7 +195,7 @@ class GameStory:
             self._draw_digit(digit, i * DIGIT_IMAGE.width, step_counter_right_offset)
 
     def draw_buttons(self):
-        self.buttons[SOUND_MINUS] = Button(
+        sound_minus_btn = Button(
             self.window,
             INDENT_SIZE,
             INDENT_SIZE,
@@ -184,37 +203,61 @@ class GameStory:
             MINUS_BUTTON.height,
             MINUS_BUTTON.image,
         )
-        self.buttons[SOUND_MINUS].draw()
+        sound_minus_btn.draw()
+        self.buttons[SOUND_MINUS] = sound_minus_btn
 
-        self.buttons[SOUND_PLUS] = Button(
+        sound_btn = Button(
             self.window,
-            INDENT_SIZE + MINUS_BUTTON.width * 2,
+            sound_minus_btn.x + sound_minus_btn.width + INDENT_SIZE,
+            INDENT_SIZE,
+            SOUND_ICON.width,
+            SOUND_ICON.height,
+            SOUND_ICON.image,
+        )
+        sound_btn.draw()
+
+        sound_plus_btn = self.buttons[SOUND_PLUS] = Button(
+            self.window,
+            sound_btn.x + sound_btn.width + INDENT_SIZE,
             INDENT_SIZE,
             PLUS_BUTTON.width,
             PLUS_BUTTON.height,
             PLUS_BUTTON.image,
         )
-        self.buttons[SOUND_PLUS].draw()
+        sound_plus_btn.draw()
+        self.buttons[SOUND_PLUS] = sound_plus_btn
 
-        self.buttons[MUSIC_MINUS] = Button(
+        music_minus_btn = Button(
             self.window,
-            INDENT_SIZE + MINUS_BUTTON.width * 6,
+            sound_plus_btn.x + sound_plus_btn.width * 2 + INDENT_SIZE * 2,
             INDENT_SIZE,
             MINUS_BUTTON.width,
             MINUS_BUTTON.height,
             MINUS_BUTTON.image,
         )
-        self.buttons[MUSIC_MINUS].draw()
+        music_minus_btn.draw()
+        self.buttons[MUSIC_MINUS] = music_minus_btn
 
-        self.buttons[MUSIC_PLUS] = Button(
+        music_btn = Button(
             self.window,
-            INDENT_SIZE + MINUS_BUTTON.width * 8,
+            music_minus_btn.x + music_minus_btn.width + INDENT_SIZE,
+            INDENT_SIZE,
+            MUSIC_ICON.width,
+            MUSIC_ICON.height,
+            MUSIC_ICON.image,
+        )
+        music_btn.draw()
+
+        music_plus_btn = self.buttons[MUSIC_PLUS] = Button(
+            self.window,
+            music_btn.x + music_btn.width + INDENT_SIZE,
             INDENT_SIZE,
             PLUS_BUTTON.width,
             PLUS_BUTTON.height,
             PLUS_BUTTON.image,
         )
-        self.buttons[MUSIC_PLUS].draw()
+        music_plus_btn.draw()
+        self.buttons[MUSIC_PLUS] = music_plus_btn
 
     def draw_background(self):
         self.window.blit(BACKGROUND_IMAGE, (0, 0))
@@ -298,4 +341,15 @@ class GameStory:
         self.window.blit(WIN_LABEL.image, (x, y))
 
     def end_game(self):
+        # TODO: Replace with another label
         self.draw_win_label()
+        # TODO: Draw "Start over" button
+
+    def draw_rat_in_place(self, mouse_pos):
+        x, y = mouse_pos
+        x -= self.cell_size / 2
+        y -= self.cell_size / 2
+        angle = random.randint(0, 3)
+        self.window.blit(pygame.transform.rotate(self.images[CELL_VALUES.HORIZONTAL], angle * 90), (x, y))
+        # Rotate looks bad - the image quality decreases
+        # self.window.blit(pygame.transform.rotate(self.images[CELL_VALUES.HORIZONTAL], 45), (x, y))

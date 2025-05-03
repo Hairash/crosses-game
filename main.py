@@ -22,7 +22,7 @@ class GameCycle:
         self.difficulty_level = 1
         self.load_game()
         self.mask = []
-        if GAME_MODE == GAME_MODES.STORY:
+        if GAME_MODE == GAME_MODES.STORY and self.rows:
             self.get_mask()
 
     def load_game(self):
@@ -34,6 +34,7 @@ class GameCycle:
                     mask_str, difficulty_level_str = f.readline().split(':')
                     self.difficulty_level = int(difficulty_level_str)
                     self.rows, self.mask_level = [int(x) for x in mask_str.split('-')]
+                    print(self.rows, self.mask_level)
         except FileNotFoundError:
             pass
 
@@ -46,7 +47,9 @@ class GameCycle:
 
     def start(self):
         while True:
-            self.check_and_process_level_up()
+            # TODO: Remove
+            if self.rows:
+                self.check_and_process_level_up()
             self.save_game()
             if GAME_MODE == GAME_MODES.STORY:
                 game = GameStory(self.rows, self.difficulty_level, self.mask)

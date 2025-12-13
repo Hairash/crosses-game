@@ -193,7 +193,7 @@ class Game:
         )
         sound_btn.draw()
 
-        sound_plus_btn = self.buttons[SOUND_PLUS] = Button(
+        sound_plus_btn = Button(
             self.window,
             sound_btn.x + sound_btn.width + INDENT_SIZE,
             INDENT_SIZE,
@@ -225,7 +225,7 @@ class Game:
         )
         music_btn.draw()
 
-        music_plus_btn = self.buttons[MUSIC_PLUS] = Button(
+        music_plus_btn = Button(
             self.window,
             music_btn.x + music_btn.width + INDENT_SIZE,
             INDENT_SIZE,
